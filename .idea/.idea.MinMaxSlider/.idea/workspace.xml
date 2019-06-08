@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="e727ad19-b10c-4b31-b94d-ff4fe243b0f4" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/Assets/Min Max Slider/MinMaxSlider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Min Max Slider/MinMaxSlider.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/EditorSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/EditorSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectVersion.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectVersion.txt" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Assets/Min Max Slider/MinMaxSlider.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="195">
+              <caret line="200" column="28" lean-forward="true" selection-start-line="200" selection-end-line="201" />
+              <folding>
+                <marker date="1560010474180" expanded="true" signature="6:103" ph="..." />
+                <marker date="1560010474180" expanded="true" signature="196:9357" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="918:1046" ph="/// Event invoked when either slider value has changed ... " />
+                <marker date="1560010474180" expanded="true" signature="1578:1804" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="1860:2010" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="2055:2142" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="2198:2267" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="2355:2667" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="2699:3013" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="3047:3328" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="3356:3480" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="3517:3787" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="3541:3784" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="3841:4736" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="4074:4151" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="4158:4733" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="4437:4512" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="4614:4689" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="4785:6384" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="4939:5006" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="5041:6381" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="5134:5564" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="5572:6129" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="6436:6923" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="6461:6534" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="6541:6920" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="7006:7292" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="7073:7289" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="7141:7257" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="7170:7252" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="7295:7368" ph="/// Generates rectTransforms world corners ... " />
+                <marker date="1560010474180" expanded="true" signature="7400:7452" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="7455:7582" ph="/// Sets handles positon  ... " />
+                <marker date="1560010474180" expanded="true" signature="7650:7864" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="7867:8028" ph="/// Returns a values from 0-1 based on this rects world corners ... " />
+                <marker date="1560010474180" expanded="true" signature="8076:8253" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="8256:8469" ph="/// Returns percentage of input based on min and max values ... " />
+                <marker date="1560010474180" expanded="true" signature="8533:8577" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="8648:8800" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="8845:9355" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="9063:9187" ph="{...}" />
+                <marker date="1560010474180" expanded="true" signature="9224:9352" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/A66F6CF3-6289-4BB1-9F21-A384FCB0474C/e3/4e861c90/Rect.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="295">
+              <caret line="148" column="38" selection-start-line="148" selection-start-column="32" selection-end-line="148" selection-end-column="38" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>OnBegin</find>
+      <find>eventdata.position</find>
+      <find>Middle</find>
+      <find>UpdateMiddle</find>
+      <find>if (DragState == Dragstate.</find>
+      <find>dragStartPosition =</find>
+      <find>sliderBounds.rect</find>
+      <find>dragStartPosition</find>
+      <find>eventData.position</find>
+    </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/A66F6CF3-6289-4BB1-9F21-A384FCB0474C/8d/837a3d39/Camera.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/A66F6CF3-6289-4BB1-9F21-A384FCB0474C/e3/4e861c90/Rect.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Min Max Slider/MinMaxSlider.cs" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/Assets/Min Max Slider/MinMaxSlider.cs" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectConfigurationFiles">
+    <option name="files">
+      <list>
+        <option value="$PROJECT_DIR$/.idea/.idea.MinMaxSlider/.idea/indexLayout.xml" />
+        <option value="$PROJECT_DIR$/.idea/.idea.MinMaxSlider/.idea/vcs.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="width" value="1570" />
+    <option name="height" value="868" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="UnityExplorer" proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="UnityExplorer">
+        <subPane>
+          <expand>
+            <path>
+              <item name="" type="e068e287:UnityExplorerRootNode" />
+              <item name="Assets" type="8711f2a6:AssetsRoot" />
+            </path>
+            <path>
+              <item name="" type="e068e287:UnityExplorerRootNode" />
+              <item name="Assets" type="8711f2a6:AssetsRoot" />
+              <item name="Min Max Slider" type="1045f7f1:UnityExplorerNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+        <option name="show-hidden-items" value="false" />
+        <option name="show-project-names" value="true" />
+      </pane>
+      <pane id="AssemblyExplorer" />
+      <pane id="FileSystemExplorer" />
+      <pane id="SolutionExplorer">
+        <option name="show-all-files" value="false" />
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="Discover.Launch.Via.Unity" value="true" />
+    <property name="Rider.DefaultBreakpoints.AreToggled" value="true" />
+    <property name="Rider.ProjectViewActivator.IsNotFirstRun" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
+    <configuration name="Attach to Unity Editor &amp; Play" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="UNITY_ATTACH_AND_PLAY" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+      <option name="allowRunningInParallel" value="false" />
+      <option name="listenPortForConnections" value="false" />
+      <option name="pid" />
+      <option name="userSelectedPid" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+      <option name="allowRunningInParallel" value="false" />
+      <option name="listenPortForConnections" value="false" />
+      <option name="pid" />
+      <option name="userSelectedPid" value="false" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e727ad19-b10c-4b31-b94d-ff4fe243b0f4" name="Default Changelist" comment="" />
+      <created>1560005389563</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1560005389563</updated>
+      <workItem from="1560005394838" duration="4348000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="4348000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-1" y="0" width="1602" height="876" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Favorites" side_tool="true" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24967907" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="NuGet" />
+      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Unity" />
+      <window_info anchor="bottom" id="Database Changes" />
+      <window_info anchor="bottom" id="Version Control" />
+      <window_info anchor="bottom" id="Unit Tests" />
+      <window_info anchor="bottom" id="Terminal" />
+      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info anchor="bottom" id="Performance Profiler" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="right" id="Errors In Solution" />
+      <window_info anchor="right" id="Database" />
+      <window_info anchor="right" id="Unit Tests Coverage" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="UnityProjectConfiguration" hasMinimizedUI="true" />
+  <component name="UnityUnitTestConfiguration" currentTestLauncher="EditMode" />
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" suspend="NONE" type="DotNet Exception Breakpoints">
+          <properties exception="System.Threading.ThreadAbortException" displayValue="System.Threading.ThreadAbortException" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/A66F6CF3-6289-4BB1-9F21-A384FCB0474C/8d/837a3d39/Camera.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="370">
+          <caret line="675" column="58" lean-forward="true" selection-start-line="675" selection-start-column="58" selection-end-line="675" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/A66F6CF3-6289-4BB1-9F21-A384FCB0474C/e3/4e861c90/Rect.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="295">
+          <caret line="148" column="38" selection-start-line="148" selection-start-column="32" selection-end-line="148" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assets/Min Max Slider/MinMaxSlider.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="200" column="28" lean-forward="true" selection-start-line="200" selection-end-line="201" />
+          <folding>
+            <marker date="1560010474180" expanded="true" signature="6:103" ph="..." />
+            <marker date="1560010474180" expanded="true" signature="196:9357" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="918:1046" ph="/// Event invoked when either slider value has changed ... " />
+            <marker date="1560010474180" expanded="true" signature="1578:1804" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="1860:2010" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="2055:2142" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="2198:2267" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="2355:2667" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="2699:3013" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="3047:3328" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="3356:3480" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="3517:3787" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="3541:3784" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="3841:4736" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="4074:4151" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="4158:4733" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="4437:4512" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="4614:4689" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="4785:6384" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="4939:5006" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="5041:6381" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="5134:5564" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="5572:6129" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="6436:6923" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="6461:6534" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="6541:6920" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="7006:7292" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="7073:7289" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="7141:7257" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="7170:7252" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="7295:7368" ph="/// Generates rectTransforms world corners ... " />
+            <marker date="1560010474180" expanded="true" signature="7400:7452" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="7455:7582" ph="/// Sets handles positon  ... " />
+            <marker date="1560010474180" expanded="true" signature="7650:7864" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="7867:8028" ph="/// Returns a values from 0-1 based on this rects world corners ... " />
+            <marker date="1560010474180" expanded="true" signature="8076:8253" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="8256:8469" ph="/// Returns percentage of input based on min and max values ... " />
+            <marker date="1560010474180" expanded="true" signature="8533:8577" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="8648:8800" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="8845:9355" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="9063:9187" ph="{...}" />
+            <marker date="1560010474180" expanded="true" signature="9224:9352" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

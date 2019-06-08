@@ -51,12 +51,19 @@ public class MinMaxSlider : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 	private float dragStartMaxValue01;
 	private DragState dragState;
 	private readonly Vector3[] worldCorners = new Vector3[4];
-	private bool passDragEvents; // this allows drag events to be passed through to scrollers 
+	private bool passDragEvents; // this allows drag events to be passed through to scrollers
+
+	private Camera mainCamera;
+	private Canvas parentCanvas;
+	private bool isOverlayCanvas; 
 
 	private void Start()
 	{
-		if (!sliderBounds)
-			sliderBounds = transform as RectTransform;
+		if (!sliderBounds) sliderBounds = transform as RectTransform;
+
+		parentCanvas = GetComponentInParent<Canvas>();
+		isOverlayCanvas = parentCanvas.renderMode == RenderMode.ScreenSpaceOverlay;
+		mainCamera = Camera.main;
 	}
 
 	public void SetLimits(float minLimit, float maxLimit)
@@ -130,6 +137,10 @@ public class MinMaxSlider : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
 	public void OnBeginDrag(PointerEventData eventData)
 	{
+		var clickPosition = isOverlayCanvas
+			? (Vector3) eventData.position
+			: mainCamera.ScreenToWorldPoint(eventData.position);
+
 		passDragEvents = Math.Abs(eventData.delta.x) < Math.Abs(eventData.delta.y);
 
 		if (passDragEvents)
@@ -138,7 +149,7 @@ public class MinMaxSlider : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 		}
 		else
 		{
-			dragStartPosition = eventData.position;
+			dragStartPosition = clickPosition;
 			dragStartMinValue01 = GetValue01(minHandle.position.x);
 			dragStartMaxValue01 = GetValue01(maxHandle.position.x);
 
@@ -160,6 +171,10 @@ public class MinMaxSlider : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
 	public void OnDrag(PointerEventData eventData)
 	{
+		var clickPosition = isOverlayCanvas
+			? (Vector3) eventData.position
+			: mainCamera.ScreenToWorldPoint(eventData.position);
+
 		if (passDragEvents)
 		{
 			PassDragEvents<IDragHandler>(x => x.OnDrag(eventData));
@@ -170,7 +185,7 @@ public class MinMaxSlider : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
 			if (dragState == DragState.Min || dragState == DragState.Max)
 			{
-				float dragPosition01 = GetValue01(eventData.position.x);
+				float dragPosition01 = GetValue01(clickPosition.x);
 				float minHandleValue = GetValue01(minHandle.position.x);
 				float maxHandleValue = GetValue01(maxHandle.position.x);
 
@@ -181,7 +196,14 @@ public class MinMaxSlider : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 			}
 			else
 			{
-				float distancePercent = (eventData.position.x - dragStartPosition.x) / sliderBounds.rect.width;
+				var sliderBoundsRect = sliderBounds.rect;
+				var rectStart = sliderBoundsRect.position;
+				var rectEnd = rectStart;
+				rectEnd.x += sliderBoundsRect.width;
+
+				var worldWidth = isOverlayCanvas ? sliderBoundsRect.width : mainCamera.ScreenToWorldPoint(rectEnd).x - mainCamera.ScreenToWorldPoint(rectStart).x;
+				
+				float distancePercent = (clickPosition.x - dragStartPosition.x) / worldWidth;
 				SetHandleValue01(minHandle, dragStartMinValue01 + distancePercent);
 				SetHandleValue01(maxHandle, dragStartMaxValue01 + distancePercent);
 
