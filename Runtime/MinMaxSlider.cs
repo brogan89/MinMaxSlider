@@ -8,14 +8,14 @@ public class MinMaxSlider : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 {
 	private enum DragState { Both, Min, Max }
 
-	[SerializeField] private RectTransform sliderBounds;
-	[SerializeField] private RectTransform minHandle;
-	[SerializeField] private RectTransform maxHandle;
-	[SerializeField] private RectTransform middleGraphic;
+	[SerializeField] private RectTransform sliderBounds = null;
+	[SerializeField] private RectTransform minHandle = null;
+	[SerializeField] private RectTransform maxHandle = null;
+	[SerializeField] private RectTransform middleGraphic = null;
 
 	// text components (optional)
-	[SerializeField] private TextMeshProUGUI minText;
-	[SerializeField] private TextMeshProUGUI maxText;
+	[SerializeField] private TextMeshProUGUI minText = null;
+	[SerializeField] private TextMeshProUGUI maxText = null;
 
 	// values
 	[SerializeField] private float minLimit = 0;
