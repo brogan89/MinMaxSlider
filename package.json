@@ -1,0 +1,20 @@
+{
+  "name": "com.brogan89.minmaxslider",
+  "displayName": "Min Max Slider",
+  "version": "1.0.0",
+  "description": "Min Max Slider UI Component for Unity",
+  "keywords": [
+    "Min",
+    "Max",
+    "Slider",
+    "Range"
+  ],
+  "category": "UI",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brogan89/MinMaxSlider.git"
+  },
+  "dependencies": {
+    "com.unity.textmeshpro": "2.0.1"
+  }
+}

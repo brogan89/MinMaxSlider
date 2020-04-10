@@ -1,0 +1,17 @@
+{
+    "name": "MinMaxSlider.Editor",
+    "references": [
+        "GUID:33684032c8b08f410adcad8e509bd8bd"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
