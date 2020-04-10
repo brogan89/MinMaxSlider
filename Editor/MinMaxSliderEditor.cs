@@ -1,9 +1,11 @@
-﻿using UnityEditor;
+﻿using System;
+using UnityEditor;
+using UnityEditor.UI;
 using UnityEngine;
 
-[CustomEditor(typeof(MinMaxSlider))]
+[CustomEditor(typeof(MinMaxSlider), true)]
 [CanEditMultipleObjects]
-public class MinMaxSliderEditor : Editor
+public class MinMaxSliderEditor : SelectableEditor
 {
 	private SerializedProperty _sliderBounds;
 	private SerializedProperty _minHandle;
@@ -21,8 +23,9 @@ public class MinMaxSliderEditor : Editor
 
 	private readonly GUIContent label = new GUIContent("Min Max Values");
 
-	private void OnEnable()
+	protected override void OnEnable()
 	{
+		base.OnEnable();
 		_sliderBounds = serializedObject.FindProperty("sliderBounds");
 		_minHandle = serializedObject.FindProperty("minHandle");
 		_maxHandle = serializedObject.FindProperty("maxHandle");
@@ -39,6 +42,8 @@ public class MinMaxSliderEditor : Editor
 
 	public override void OnInspectorGUI()
 	{
+		base.OnInspectorGUI();
+
 		serializedObject.Update();
 
 		float minLimitOld = _minLimit.floatValue;
@@ -46,21 +51,21 @@ public class MinMaxSliderEditor : Editor
 		float minValueOld = _minValue.floatValue;
 		float maxValueOld = _maxValue.floatValue;
 
-		Label("UI Controls");
+		SetLabel("UI Controls");
 		EditorGUILayout.PropertyField(_sliderBounds);
 		EditorGUILayout.PropertyField(_minHandle);
 		EditorGUILayout.PropertyField(_maxHandle);
 		EditorGUILayout.PropertyField(_middleGraphic);
 
-		Label("Display Text (Optional)");
+		SetLabel("Display Text (Optional)");
 		EditorGUILayout.PropertyField(_minText);
 		EditorGUILayout.PropertyField(_maxText);
 
-		Label("Limits");
+		SetLabel("Limits");
 		EditorGUILayout.PropertyField(_minLimit);
 		EditorGUILayout.PropertyField(_maxLimit);
 
-		Label("Values");
+		SetLabel("Values");
 		EditorGUILayout.PropertyField(_wholeNumbers);
 		EditorGUILayout.PropertyField(_minValue);
 		EditorGUILayout.PropertyField(_maxValue);
@@ -69,14 +74,15 @@ public class MinMaxSliderEditor : Editor
 		float maxValue = Mathf.Clamp(_maxValue.floatValue, _minLimit.floatValue, _maxLimit.floatValue);
 		EditorGUILayout.MinMaxSlider(label, ref minValue, ref maxValue, _minLimit.floatValue, _maxLimit.floatValue);
 
-		bool anyValueChanged = minValueOld != minValue
-							|| maxValueOld != maxValue
-							|| minLimitOld != _minLimit.floatValue
-							|| maxLimitOld != _maxLimit.floatValue;
+		bool anyValueChanged = !IsEqualFloat(minValueOld, minValue)
+		                       || !IsEqualFloat(maxValueOld, maxValue)
+		                       || !IsEqualFloat(minLimitOld, _minLimit.floatValue)
+		                       || !IsEqualFloat(maxLimitOld, _maxLimit.floatValue);
 
 		if (anyValueChanged)
 		{
-			MinMaxSlider slider = target as MinMaxSlider;
+			MinMaxSlider slider = (MinMaxSlider)target;
+			
 			// force limits to ints if whole numbers.
 			// needed to do this here because it wouldn't set in component script for some reason
 			if (slider.wholeNumbers)
@@ -95,7 +101,22 @@ public class MinMaxSliderEditor : Editor
 		serializedObject.ApplyModifiedProperties();
 	}
 
-	private void Label(string label)
+	/// <summary>
+	/// Returns true if floating point numbers are within 0.01f (close enough to be considered equal)
+	/// </summary>
+	/// <param name="a"></param>
+	/// <param name="b"></param>
+	/// <returns></returns>
+	private static bool IsEqualFloat(float a, float b)
+	{
+		return Math.Abs(a - b) < 0.01f;
+	}
+	
+	/// <summary>
+	/// Wrapper for settings label. Adds space before label text
+	/// </summary>
+	/// <param name="label"></param>
+	private static void SetLabel(string label)
 	{
 		EditorGUILayout.Space();
 		EditorGUILayout.LabelField(label, EditorStyles.boldLabel);

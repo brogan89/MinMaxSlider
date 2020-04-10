@@ -3,11 +3,18 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using TMPro;
+using UnityEngine.UI;
 
-public class MinMaxSlider : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+[RequireComponent(typeof(RectTransform))]
+public class MinMaxSlider : Selectable, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
 	private enum DragState { Both, Min, Max }
 
+	/// <summary>
+	/// Floating point tolerance
+	/// </summary>
+	private const float FLOAT_TOL = 0.01f;
+	
 	[SerializeField] private RectTransform sliderBounds = null;
 	[SerializeField] private RectTransform minHandle = null;
 	[SerializeField] private RectTransform maxHandle = null;
@@ -45,11 +52,14 @@ public class MinMaxSlider : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
 	private Camera mainCamera;
 	private Canvas parentCanvas;
-	private bool isOverlayCanvas; 
+	private bool isOverlayCanvas;
 
-	private void Start()
+	protected override void Start()
 	{
-		if (!sliderBounds) sliderBounds = transform as RectTransform;
+		base.Start();
+		
+		if (!sliderBounds)
+			sliderBounds = transform as RectTransform;
 
 		parentCanvas = GetComponentInParent<Canvas>();
 		isOverlayCanvas = parentCanvas.renderMode == RenderMode.ScreenSpaceOverlay;
@@ -69,7 +79,7 @@ public class MinMaxSlider : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
 	public void SetValues(float minValue, float maxValue)
 	{
-		SetValues(minValue, maxValue, this.minLimit, this.maxLimit);
+		SetValues(minValue, maxValue, minLimit, maxLimit);
 	}
 
 	public void SetValues(float minValue, float maxValue, float minLimit, float maxLimit)
@@ -110,19 +120,22 @@ public class MinMaxSlider : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
 	private void UpdateText()
 	{
-		minText?.SetText(Mathf.RoundToInt(minValue).ToString());
-		maxText?.SetText(Mathf.RoundToInt(maxValue).ToString());
+		if(minText)
+			minText.SetText(minValue.ToString("0"));
+		
+		if(maxText)
+			maxText.SetText(maxValue.ToString("0"));
 	}
 
 	private void UpdateMiddleGraphic()
 	{
-		if (middleGraphic)
-		{
-			middleGraphic.anchorMin = Vector2.zero;
-			middleGraphic.anchorMax = Vector2.one;
-			middleGraphic.offsetMin = new Vector2(minHandle.anchoredPosition.x, 0);
-			middleGraphic.offsetMax = new Vector2(maxHandle.anchoredPosition.x, 0);
-		}
+		if (!middleGraphic)
+			return;
+		
+		middleGraphic.anchorMin = Vector2.zero;
+		middleGraphic.anchorMax = Vector2.one;
+		middleGraphic.offsetMin = new Vector2(minHandle.anchoredPosition.x, 0);
+		middleGraphic.offsetMax = new Vector2(maxHandle.anchoredPosition.x, 0);
 	}
 
 	public void OnBeginDrag(PointerEventData eventData)
@@ -221,9 +234,9 @@ public class MinMaxSlider : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 			float maxHandleValue = GetValue01(maxHandle.position.x);
 
 			// this safe guards a possible situation where the slides can get stuck
-			if (minHandleValue == 0 && maxHandleValue == 0)
+			if (Math.Abs(minHandleValue) < FLOAT_TOL && Math.Abs(maxHandleValue) < FLOAT_TOL)
 				maxHandle.SetAsLastSibling();
-			else if (minHandleValue == 1 && maxHandleValue == 1)
+			else if (Math.Abs(minHandleValue - 1) < FLOAT_TOL && Math.Abs(maxHandleValue - 1) < FLOAT_TOL)
 				minHandle.SetAsLastSibling();
 		}
 	}
@@ -231,15 +244,16 @@ public class MinMaxSlider : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 	private void PassDragEvents<T>(Action<T> callback) where T : IEventSystemHandler
 	{
 		Transform parent = transform.parent;
+		
 		while (parent != null)
 		{
 			foreach (var component in parent.GetComponents<Component>())
 			{
-				if (component is T)
-				{
-					callback.Invoke((T)(IEventSystemHandler)component);
-					return;
-				}
+				if (!(component is T))
+					continue;
+				
+				callback.Invoke((T)(IEventSystemHandler)component);
+				return;
 			}
 
 			parent = parent.parent;
@@ -255,11 +269,11 @@ public class MinMaxSlider : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 	}
 
 	/// <summary>
-	/// Sets handles positon 
+	/// Sets handles position 
 	/// </summary>
 	/// <param name="handle"></param>
 	/// <param name="value01"></param>
-	private void SetHandleValue01(RectTransform handle, float value01)
+	private void SetHandleValue01(Transform handle, float value01)
 	{
 		GetWorldCorners();
 		Vector2 pos = new Vector2(
@@ -272,7 +286,7 @@ public class MinMaxSlider : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 	/// <summary>
 	/// Returns a values from 0-1 based on this rects world corners
 	/// </summary>
-	/// <param name="worldPosition"></param>
+	/// <param name="worldPositionX"></param>
 	/// <returns></returns>
 	private float GetValue01(float worldPositionX)
 	{
@@ -288,12 +302,12 @@ public class MinMaxSlider : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 	/// <param name="max"></param>
 	/// <param name="input"></param>
 	/// <returns></returns>
-	private float GetPercentage(float min, float max, float input)
+	private static float GetPercentage(float min, float max, float input)
 	{
 		return (input - min) / (max - min);
 	}
 
-	private bool IsWithinRect(RectTransform rect, Vector2 worldPosition)
+	private static bool IsWithinRect(RectTransform rect, Vector2 worldPosition)
 	{
 		Vector3[] corners = new Vector3[4];
 		rect.GetWorldCorners(corners);
@@ -316,7 +330,7 @@ public class MinMaxSlider : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
 		public override string ToString()
 		{
-			return string.Format("Values(min:{0}, max:{1}) | Limits(min:{2}, max:{3})", minValue, maxValue, minLimit, maxLimit);
+			return $"Values(min:{minValue}, max:{maxValue}) | Limits(min:{minLimit}, max:{maxLimit})";
 		}
 	}
 }
