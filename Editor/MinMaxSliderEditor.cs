@@ -7,6 +7,7 @@ using UnityEngine;
 [CanEditMultipleObjects]
 public class MinMaxSliderEditor : SelectableEditor
 {
+	private SerializedProperty _customCamera;
 	private SerializedProperty _sliderBounds;
 	private SerializedProperty _minHandle;
 	private SerializedProperty _maxHandle;
@@ -26,6 +27,7 @@ public class MinMaxSliderEditor : SelectableEditor
 	protected override void OnEnable()
 	{
 		base.OnEnable();
+		_customCamera = serializedObject.FindProperty("customCamera");
 		_sliderBounds = serializedObject.FindProperty("sliderBounds");
 		_minHandle = serializedObject.FindProperty("minHandle");
 		_maxHandle = serializedObject.FindProperty("maxHandle");
@@ -52,6 +54,7 @@ public class MinMaxSliderEditor : SelectableEditor
 		float maxValueOld = _maxValue.floatValue;
 
 		SetLabel("UI Controls");
+		EditorGUILayout.PropertyField(_customCamera);
 		EditorGUILayout.PropertyField(_sliderBounds);
 		EditorGUILayout.PropertyField(_minHandle);
 		EditorGUILayout.PropertyField(_maxHandle);
@@ -75,14 +78,14 @@ public class MinMaxSliderEditor : SelectableEditor
 		EditorGUILayout.MinMaxSlider(label, ref minValue, ref maxValue, _minLimit.floatValue, _maxLimit.floatValue);
 
 		bool anyValueChanged = !IsEqualFloat(minValueOld, minValue)
-		                       || !IsEqualFloat(maxValueOld, maxValue)
-		                       || !IsEqualFloat(minLimitOld, _minLimit.floatValue)
-		                       || !IsEqualFloat(maxLimitOld, _maxLimit.floatValue);
+							   || !IsEqualFloat(maxValueOld, maxValue)
+							   || !IsEqualFloat(minLimitOld, _minLimit.floatValue)
+							   || !IsEqualFloat(maxLimitOld, _maxLimit.floatValue);
 
 		if (anyValueChanged)
 		{
 			MinMaxSlider slider = (MinMaxSlider)target;
-			
+
 			// force limits to ints if whole numbers.
 			// needed to do this here because it wouldn't set in component script for some reason
 			if (slider.wholeNumbers)
@@ -111,7 +114,7 @@ public class MinMaxSliderEditor : SelectableEditor
 	{
 		return Math.Abs(a - b) < 0.01f;
 	}
-	
+
 	/// <summary>
 	/// Wrapper for settings label. Adds space before label text
 	/// </summary>

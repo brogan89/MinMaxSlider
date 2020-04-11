@@ -14,7 +14,8 @@ public class MinMaxSlider : Selectable, IBeginDragHandler, IDragHandler, IEndDra
 	/// Floating point tolerance
 	/// </summary>
 	private const float FLOAT_TOL = 0.01f;
-	
+
+	[SerializeField] private Camera customCamera;
 	[SerializeField] private RectTransform sliderBounds = null;
 	[SerializeField] private RectTransform minHandle = null;
 	[SerializeField] private RectTransform maxHandle = null;
@@ -57,13 +58,13 @@ public class MinMaxSlider : Selectable, IBeginDragHandler, IDragHandler, IEndDra
 	protected override void Start()
 	{
 		base.Start();
-		
+
 		if (!sliderBounds)
 			sliderBounds = transform as RectTransform;
 
 		parentCanvas = GetComponentInParent<Canvas>();
 		isOverlayCanvas = parentCanvas.renderMode == RenderMode.ScreenSpaceOverlay;
-		mainCamera = Camera.main;
+		mainCamera = customCamera != null ? customCamera : Camera.main;
 	}
 
 	public void SetLimits(float minLimit, float maxLimit)
@@ -120,10 +121,10 @@ public class MinMaxSlider : Selectable, IBeginDragHandler, IDragHandler, IEndDra
 
 	private void UpdateText()
 	{
-		if(minText)
+		if (minText)
 			minText.SetText(minValue.ToString("0"));
-		
-		if(maxText)
+
+		if (maxText)
 			maxText.SetText(maxValue.ToString("0"));
 	}
 
@@ -131,7 +132,7 @@ public class MinMaxSlider : Selectable, IBeginDragHandler, IDragHandler, IEndDra
 	{
 		if (!middleGraphic)
 			return;
-		
+
 		middleGraphic.anchorMin = Vector2.zero;
 		middleGraphic.anchorMax = Vector2.one;
 		middleGraphic.offsetMin = new Vector2(minHandle.anchoredPosition.x, 0);
@@ -141,7 +142,7 @@ public class MinMaxSlider : Selectable, IBeginDragHandler, IDragHandler, IEndDra
 	public void OnBeginDrag(PointerEventData eventData)
 	{
 		var clickPosition = isOverlayCanvas
-			? (Vector3) eventData.position
+			? (Vector3)eventData.position
 			: mainCamera.ScreenToWorldPoint(eventData.position);
 
 		passDragEvents = Math.Abs(eventData.delta.x) < Math.Abs(eventData.delta.y);
@@ -175,7 +176,7 @@ public class MinMaxSlider : Selectable, IBeginDragHandler, IDragHandler, IEndDra
 	public void OnDrag(PointerEventData eventData)
 	{
 		var clickPosition = isOverlayCanvas
-			? (Vector3) eventData.position
+			? (Vector3)eventData.position
 			: mainCamera.ScreenToWorldPoint(eventData.position);
 
 		if (passDragEvents)
@@ -205,7 +206,7 @@ public class MinMaxSlider : Selectable, IBeginDragHandler, IDragHandler, IEndDra
 				rectEnd.x += sliderBoundsRect.width;
 
 				var worldWidth = isOverlayCanvas ? sliderBoundsRect.width : mainCamera.ScreenToWorldPoint(rectEnd).x - mainCamera.ScreenToWorldPoint(rectStart).x;
-				
+
 				float distancePercent = (clickPosition.x - dragStartPosition.x) / worldWidth;
 				SetHandleValue01(minHandle, dragStartMinValue01 + distancePercent);
 				SetHandleValue01(maxHandle, dragStartMaxValue01 + distancePercent);
@@ -244,14 +245,14 @@ public class MinMaxSlider : Selectable, IBeginDragHandler, IDragHandler, IEndDra
 	private void PassDragEvents<T>(Action<T> callback) where T : IEventSystemHandler
 	{
 		Transform parent = transform.parent;
-		
+
 		while (parent != null)
 		{
 			foreach (var component in parent.GetComponents<Component>())
 			{
 				if (!(component is T))
 					continue;
-				
+
 				callback.Invoke((T)(IEventSystemHandler)component);
 				return;
 			}
@@ -280,7 +281,7 @@ public class MinMaxSlider : Selectable, IBeginDragHandler, IDragHandler, IEndDra
 			Mathf.Lerp(worldCorners[0].x, worldCorners[2].x, value01),
 			worldCorners[0].y + (worldCorners[1].y - worldCorners[0].y) / 2f);
 
-		handle.position = pos;
+		handle.position = new Vector3(pos.x, pos.y, handle.position.z);
 	}
 
 	/// <summary>
