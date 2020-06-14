@@ -1,4 +1,5 @@
 ﻿using System;
+using Min_Max_Slider;
 using UnityEditor;
 using UnityEditor.UI;
 using UnityEngine;
@@ -13,6 +14,7 @@ public class MinMaxSliderEditor : SelectableEditor
 	private SerializedProperty _maxHandle;
 	private SerializedProperty _minText;
 	private SerializedProperty _maxText;
+	private SerializedProperty _textFormat;
 	private SerializedProperty _middleGraphic;
 	private SerializedProperty _minLimit;
 	private SerializedProperty _maxLimit;
@@ -33,6 +35,7 @@ public class MinMaxSliderEditor : SelectableEditor
 		_maxHandle = serializedObject.FindProperty("maxHandle");
 		_minText = serializedObject.FindProperty("minText");
 		_maxText = serializedObject.FindProperty("maxText");
+		_textFormat = serializedObject.FindProperty("textFormat");
 		_middleGraphic = serializedObject.FindProperty("middleGraphic");
 		_minLimit = serializedObject.FindProperty("minLimit");
 		_maxLimit = serializedObject.FindProperty("maxLimit");
@@ -53,22 +56,19 @@ public class MinMaxSliderEditor : SelectableEditor
 		float minValueOld = _minValue.floatValue;
 		float maxValueOld = _maxValue.floatValue;
 
-		SetLabel("UI Controls");
 		EditorGUILayout.PropertyField(_customCamera);
 		EditorGUILayout.PropertyField(_sliderBounds);
 		EditorGUILayout.PropertyField(_minHandle);
 		EditorGUILayout.PropertyField(_maxHandle);
 		EditorGUILayout.PropertyField(_middleGraphic);
 
-		SetLabel("Display Text (Optional)");
 		EditorGUILayout.PropertyField(_minText);
 		EditorGUILayout.PropertyField(_maxText);
+		EditorGUILayout.PropertyField(_textFormat);
 
-		SetLabel("Limits");
 		EditorGUILayout.PropertyField(_minLimit);
 		EditorGUILayout.PropertyField(_maxLimit);
 
-		SetLabel("Values");
 		EditorGUILayout.PropertyField(_wholeNumbers);
 		EditorGUILayout.PropertyField(_minValue);
 		EditorGUILayout.PropertyField(_maxValue);
@@ -113,15 +113,5 @@ public class MinMaxSliderEditor : SelectableEditor
 	private static bool IsEqualFloat(float a, float b)
 	{
 		return Math.Abs(a - b) < 0.01f;
-	}
-
-	/// <summary>
-	/// Wrapper for settings label. Adds space before label text
-	/// </summary>
-	/// <param name="label"></param>
-	private static void SetLabel(string label)
-	{
-		EditorGUILayout.Space();
-		EditorGUILayout.LabelField(label, EditorStyles.boldLabel);
 	}
 }
