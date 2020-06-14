@@ -345,6 +345,24 @@ namespace Min_Max_Slider
 				this.minLimit = minLimit;
 				this.maxLimit = maxLimit;
 			}
+			
+			/// <summary>
+            /// Constructor for when values equal limits
+            /// </summary>
+            /// <param name="minValue"></param>
+            /// <param name="maxValue"></param>
+            public MinMaxValues(float minValue, float maxValue)
+            {
+            	this.minValue = minValue;
+            	this.maxValue = maxValue;
+            	this.minLimit = minValue;
+            	this.maxLimit = maxValue;
+            }
+            
+            public bool IsAtMinAndMax()
+            {
+            	return Math.Abs(minValue - minLimit) < FLOAT_TOL && Math.Abs(maxValue - maxLimit) < FLOAT_TOL;
+            }
 
 			public override string ToString()
 			{
