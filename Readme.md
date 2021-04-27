@@ -3,6 +3,7 @@
 # Install
 
 ## OpenUPM
+[![openupm](https://img.shields.io/npm/v/com.littlebigfun.addressable-importer?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.littlebigfun.addressable-importer/)
 
 - Install with [OpenUPM CLI](https://openupm.com/) `openupm add com.brogan89.minmaxslider`
 
