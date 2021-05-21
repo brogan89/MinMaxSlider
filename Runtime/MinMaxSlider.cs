@@ -59,11 +59,10 @@ namespace Min_Max_Slider
 
 		public SliderEvent onValueChanged = new SliderEvent();
 
-		private Vector3 dragStartPosition;
+		private Vector2 dragStartPosition;
 		private float dragStartMinValue01;
 		private float dragStartMaxValue01;
 		private DragState dragState;
-		private readonly Vector3[] worldCorners = new Vector3[4];
 		private bool passDragEvents; // this allows drag events to be passed through to scrollers
 
 		private Camera mainCamera;
@@ -120,10 +119,10 @@ namespace Min_Max_Slider
 			SetSliderAnchors();
 
 			float clampedMin = Mathf.Clamp(minValue, minLimit, maxLimit);
-			SetHandleValue01(minHandle, GetPercentage(minLimit, maxLimit, clampedMin));
+			SetMinHandleValue01(minHandle, GetPercentage(minLimit, maxLimit, clampedMin));
 
 			float clampedMax = Mathf.Clamp(maxValue, minLimit, maxLimit);
-			SetHandleValue01(maxHandle, GetPercentage(minLimit, maxLimit, clampedMax));
+			SetMaxHandleValue01(maxHandle, GetPercentage(minLimit, maxLimit, clampedMax));
 		}
 
 		private void SetSliderAnchors()
@@ -159,13 +158,6 @@ namespace Min_Max_Slider
 
 		public void OnBeginDrag(PointerEventData eventData)
 		{
-			var clickPosition = (Vector3) eventData.position;
-			
-			if (!isOverlayCanvas) 
-			{
-				RectTransformUtility.ScreenPointToWorldPointInRectangle(sliderBounds, eventData.position, mainCamera, out clickPosition);
-			}
-			
 			passDragEvents = Math.Abs(eventData.delta.x) < Math.Abs(eventData.delta.y);
 
 			if (passDragEvents)
@@ -174,17 +166,20 @@ namespace Min_Max_Slider
 			}
 			else
 			{
-				dragStartPosition = clickPosition;
-				dragStartMinValue01 = GetValue01(minHandle.position.x);
-				dragStartMaxValue01 = GetValue01(maxHandle.position.x);
+				Camera uiCamera = isOverlayCanvas ? null : mainCamera;
+				RectTransformUtility.ScreenPointToLocalPointInRectangle(sliderBounds, eventData.position, uiCamera, out dragStartPosition);
+
+				float dragStartValue = GetValueOfPointInSliderBounds01(dragStartPosition);
+				dragStartMinValue01 = GetMinHandleValue01(minHandle);
+				dragStartMaxValue01 = GetMaxHandleValue01(maxHandle);
 
 				// set drag state
-				if (dragStartPosition.x < minHandle.position.x || IsWithinRect(minHandle, dragStartPosition))
+				if (dragStartValue < dragStartMinValue01 || RectTransformUtility.RectangleContainsScreenPoint(minHandle, eventData.position, uiCamera))
 				{
 					dragState = DragState.Min;
 					minHandle.SetAsLastSibling();
 				}
-				else if (dragStartPosition.x > maxHandle.position.x || IsWithinRect(maxHandle, dragStartPosition))
+				else if (dragStartValue > dragStartMaxValue01 || RectTransformUtility.RectangleContainsScreenPoint(maxHandle, eventData.position, uiCamera))
 				{
 					dragState = DragState.Max;
 					maxHandle.SetAsLastSibling();
@@ -196,57 +191,37 @@ namespace Min_Max_Slider
 
 		public void OnDrag(PointerEventData eventData)
 		{
-			var clickPosition = (Vector3) eventData.position;
-			
-			if (!isOverlayCanvas) 
-			{
-				RectTransformUtility.ScreenPointToWorldPointInRectangle(sliderBounds, eventData.position, mainCamera, out clickPosition);
-			}
-
 			if (passDragEvents)
 			{
 				PassDragEvents<IDragHandler>(x => x.OnDrag(eventData));
 			}
 			else if (minHandle && maxHandle)
 			{
+				RectTransformUtility.ScreenPointToLocalPointInRectangle(sliderBounds, eventData.position, isOverlayCanvas ? null : mainCamera, out Vector2 clickPosition);
+
 				SetSliderAnchors();
 
 				if (dragState == DragState.Min || dragState == DragState.Max)
 				{
-					float dragPosition01 = GetValue01(clickPosition.x);
-					float minHandleValue = GetValue01(minHandle.position.x);
-					float maxHandleValue = GetValue01(maxHandle.position.x);
+					float dragPosition01 = GetValueOfPointInSliderBounds01(clickPosition);
+					float minHandleValue = GetMinHandleValue01(minHandle);
+					float maxHandleValue = GetMaxHandleValue01(maxHandle);
 
 					if (dragState == DragState.Min)
-						SetHandleValue01(minHandle, Mathf.Clamp(dragPosition01, 0, maxHandleValue));
+						SetMinHandleValue01(minHandle, Mathf.Clamp(dragPosition01, 0, maxHandleValue));
 					else if (dragState == DragState.Max)
-						SetHandleValue01(maxHandle, Mathf.Clamp(dragPosition01, minHandleValue, 1));
+						SetMaxHandleValue01(maxHandle, Mathf.Clamp(dragPosition01, minHandleValue, 1));
 				}
 				else
 				{
-					var sliderBoundsRect = sliderBounds.rect;
-					var worldWidth = sliderBoundsRect.width;
-					
-					if (!isOverlayCanvas) 
-					{
-						var endPosition = sliderBoundsRect.position;
-						endPosition.x += sliderBoundsRect.width;
-						
-						RectTransformUtility.ScreenPointToWorldPointInRectangle(sliderBounds, sliderBoundsRect.position, mainCamera, out var rectStart);
-						RectTransformUtility.ScreenPointToWorldPointInRectangle(sliderBounds, endPosition, mainCamera, out var rectEnd);
-						
-						worldWidth = Vector3.Distance(rectStart, rectEnd);
-					}
-					
-					float distancePercent = (clickPosition.x - dragStartPosition.x) / worldWidth;
-					SetHandleValue01(minHandle, dragStartMinValue01 + distancePercent);
-					SetHandleValue01(maxHandle, dragStartMaxValue01 + distancePercent);
-
+					float distancePercent = (clickPosition.x - dragStartPosition.x) / sliderBounds.rect.width;
+					SetMinHandleValue01(minHandle, dragStartMinValue01 + distancePercent);
+					SetMaxHandleValue01(maxHandle, dragStartMaxValue01 + distancePercent);
 				}
 
 				// set values
-				float min = Mathf.Lerp(minLimit, maxLimit, GetValue01(minHandle.position.x));
-				float max = Mathf.Lerp(minLimit, maxLimit, GetValue01(maxHandle.position.x));
+				float min = Mathf.Lerp(minLimit, maxLimit, GetMinHandleValue01(minHandle));
+				float max = Mathf.Lerp(minLimit, maxLimit, GetMaxHandleValue01(maxHandle));
 				SetValues(min, max);
 
 				UpdateText();
@@ -262,8 +237,8 @@ namespace Min_Max_Slider
 			}
 			else
 			{
-				float minHandleValue = GetValue01(minHandle.position.x);
-				float maxHandleValue = GetValue01(maxHandle.position.x);
+				float minHandleValue = GetMinHandleValue01(minHandle);
+				float maxHandleValue = GetMaxHandleValue01(maxHandle);
 
 				// this safe guards a possible situation where the slides can get stuck
 				if (Math.Abs(minHandleValue) < FLOAT_TOL && Math.Abs(maxHandleValue) < FLOAT_TOL)
@@ -293,38 +268,54 @@ namespace Min_Max_Slider
 		}
 
 		/// <summary>
-		/// Generates rectTransforms world corners
-		/// </summary>
-		private void GetWorldCorners()
-		{
-			sliderBounds.GetWorldCorners(worldCorners);
-		}
-
-		/// <summary>
-		/// Sets handles position 
+		/// Sets position of max handle RectTransform
 		/// </summary>
 		/// <param name="handle"></param>
-		/// <param name="value01"></param>
-		private void SetHandleValue01(Transform handle, float value01)
+		/// <param name="value01">Normalized handle position</param>
+		private void SetMaxHandleValue01(RectTransform handle, float value01)
 		{
-			GetWorldCorners();
-			Vector2 pos = new Vector2(
-				Mathf.Lerp(worldCorners[0].x, worldCorners[2].x, value01),
-				worldCorners[0].y + (worldCorners[1].y - worldCorners[0].y) / 2f);
-
-			handle.position = new Vector3(pos.x, pos.y, handle.position.z);
+			handle.anchoredPosition = new Vector2(value01 * sliderBounds.rect.width - sliderBounds.rect.width + sliderBounds.offsetMax.x, handle.anchoredPosition.y);
 		}
 
 		/// <summary>
-		/// Returns a values from 0-1 based on this rects world corners
+		/// Sets position of min handle RectTransform
 		/// </summary>
-		/// <param name="worldPositionX"></param>
-		/// <returns></returns>
-		private float GetValue01(float worldPositionX)
+		/// <param name="handle"></param>
+		/// <param name="value01">Normalized handle position</param>
+		private void SetMinHandleValue01(RectTransform handle, float value01)
 		{
-			GetWorldCorners();
-			float posX = Mathf.Clamp(worldPositionX, worldCorners[0].x, worldCorners[2].x);
-			return GetPercentage(worldCorners[0].x, worldCorners[2].x, posX);
+			handle.anchoredPosition = new Vector2(value01 * sliderBounds.rect.width + sliderBounds.offsetMin.x, handle.anchoredPosition.y);
+		}
+
+		/// <summary>
+		/// Returns normalized position of max handle RectTransform
+		/// </summary>
+		/// <param name="handle"></param>
+		/// <returns>Normalized position of max handle RectTransform</returns>
+		private float GetMaxHandleValue01(RectTransform handle)
+		{
+			return 1 + (handle.anchoredPosition.x - sliderBounds.offsetMax.x) / sliderBounds.rect.width;
+		}
+
+		/// <summary>
+		/// Returns normalized position of min handle RectTransform
+		/// </summary>
+		/// <param name="handle"></param>
+		/// <returns>Normalized position of min handle RectTransform</returns>
+		private float GetMinHandleValue01(RectTransform handle)
+		{
+			return (handle.anchoredPosition.x - sliderBounds.offsetMin.x) / sliderBounds.rect.width;
+		}
+
+		/// <summary>
+		/// Returns normalized position of a point in a slider bounds rectangle
+		/// </summary>
+		/// <param name="position"></param>
+		/// <returns>Normalized position of a point in a slider bounds rectangle</returns>
+		private float GetValueOfPointInSliderBounds01(Vector2 position)
+		{
+			var width = sliderBounds.rect.width;
+			return Mathf.Clamp((position.x + width / 2) / width, 0, 1);
 		}
 
 		/// <summary>
@@ -337,13 +328,6 @@ namespace Min_Max_Slider
 		private static float GetPercentage(float min, float max, float input)
 		{
 			return (input - min) / (max - min);
-		}
-
-		private static bool IsWithinRect(RectTransform rect, Vector2 worldPosition)
-		{
-			Vector3[] corners = new Vector3[4];
-			rect.GetWorldCorners(corners);
-			return worldPosition.x > corners[0].x && worldPosition.x < corners[2].x;
 		}
 
 		[Serializable]
