@@ -196,7 +196,7 @@ namespace Min_Max_Slider
 
 		public void OnDrag(PointerEventData eventData)
 		{
-					var clickPosition = (Vector3) eventData.position;
+			var clickPosition = (Vector3) eventData.position;
 			
 			if (!isOverlayCanvas) 
 			{
