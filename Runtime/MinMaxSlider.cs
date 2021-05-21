@@ -157,13 +157,13 @@ namespace Min_Max_Slider
 		public void OnBeginDrag(PointerEventData eventData)
 		{
 			var clickPosition = (Vector3) eventData.position;
-
-            if (!isOverlayCanvas) 
-            {
-                RectTransformUtility.ScreenPointToWorldPointInRectangle(sliderBounds, eventData.position, mainCamera, out clickPosition);
-            }
-
-            passDragEvents = Math.Abs(eventData.delta.x) < Math.Abs(eventData.delta.y);
+			
+			if (!isOverlayCanvas) 
+			{
+				RectTransformUtility.ScreenPointToWorldPointInRectangle(sliderBounds, eventData.position, mainCamera, out clickPosition);
+			}
+			
+			passDragEvents = Math.Abs(eventData.delta.x) < Math.Abs(eventData.delta.y);
 
 			if (passDragEvents)
 			{
@@ -193,12 +193,12 @@ namespace Min_Max_Slider
 
 		public void OnDrag(PointerEventData eventData)
 		{
-            var clickPosition = (Vector3) eventData.position;
-
-            if (!isOverlayCanvas) 
-            {
-                RectTransformUtility.ScreenPointToWorldPointInRectangle(sliderBounds, eventData.position, mainCamera, out clickPosition);
-            }
+            		var clickPosition = (Vector3) eventData.position;
+			
+			if (!isOverlayCanvas) 
+			{
+				RectTransformUtility.ScreenPointToWorldPointInRectangle(sliderBounds, eventData.position, mainCamera, out clickPosition);
+			}
 
 			if (passDragEvents)
 			{
@@ -222,20 +222,20 @@ namespace Min_Max_Slider
 				else
 				{
 					var sliderBoundsRect = sliderBounds.rect;
-                    var worldWidth = sliderBoundsRect.width;
-
-                    if (!isOverlayCanvas) 
-                    {
-                        var endPosition = sliderBoundsRect.position;
-                        endPosition.x += sliderBoundsRect.width;
-
-                        RectTransformUtility.ScreenPointToWorldPointInRectangle(sliderBounds, sliderBoundsRect.position, mainCamera, out var rectStart);
+					var worldWidth = sliderBoundsRect.width;
+					
+					if (!isOverlayCanvas) 
+					{
+						var endPosition = sliderBoundsRect.position;
+						endPosition.x += sliderBoundsRect.width;
+						
+						RectTransformUtility.ScreenPointToWorldPointInRectangle(sliderBounds, sliderBoundsRect.position, mainCamera, out var rectStart);
 						RectTransformUtility.ScreenPointToWorldPointInRectangle(sliderBounds, endPosition, mainCamera, out var rectEnd);
-
-                        worldWidth = Vector3.Distance(rectStart, rectEnd);
-                    }
-
-                    float distancePercent = (clickPosition.x - dragStartPosition.x) / worldWidth;
+						
+						worldWidth = Vector3.Distance(rectStart, rectEnd);
+					}
+					
+					float distancePercent = (clickPosition.x - dragStartPosition.x) / worldWidth;
 					SetHandleValue01(minHandle, dragStartMinValue01 + distancePercent);
 					SetHandleValue01(maxHandle, dragStartMaxValue01 + distancePercent);
 
