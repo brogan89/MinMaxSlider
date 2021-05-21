@@ -88,17 +88,17 @@ namespace Min_Max_Slider
 			this.maxLimit = wholeNumbers ? Mathf.RoundToInt(maxLimit) : maxLimit;
 		}
 
-		public void SetValues(MinMaxValues values)
+		public void SetValues(MinMaxValues values, bool notify = true)
 		{
-			SetValues(values.minValue, values.maxValue, values.minLimit, values.maxLimit);
+			SetValues(values.minValue, values.maxValue, values.minLimit, values.maxLimit, notify);
 		}
 
-		public void SetValues(float minValue, float maxValue)
+		public void SetValues(float minValue, float maxValue, bool notify = true)
 		{
-			SetValues(minValue, maxValue, minLimit, maxLimit);
+			SetValues(minValue, maxValue, minLimit, maxLimit, notify);
 		}
 
-		public void SetValues(float minValue, float maxValue, float minLimit, float maxLimit)
+		public void SetValues(float minValue, float maxValue, float minLimit, float maxLimit, bool notify = true)
 		{
 			this.minValue = wholeNumbers ? Mathf.RoundToInt(minValue) : minValue;
 			this.maxValue = wholeNumbers ? Mathf.RoundToInt(maxValue) : maxValue;
@@ -108,8 +108,11 @@ namespace Min_Max_Slider
 			UpdateText();
 			UpdateMiddleGraphic();
 
-			// event
-			onValueChanged.Invoke(this.minValue, this.maxValue);
+			if (notify)
+			{
+				// event
+				onValueChanged.Invoke(this.minValue, this.maxValue);
+			}
 		}
 
 		private void RefreshSliders()
@@ -193,7 +196,7 @@ namespace Min_Max_Slider
 
 		public void OnDrag(PointerEventData eventData)
 		{
-            		var clickPosition = (Vector3) eventData.position;
+					var clickPosition = (Vector3) eventData.position;
 			
 			if (!isOverlayCanvas) 
 			{
@@ -358,22 +361,22 @@ namespace Min_Max_Slider
 			}
 			
 			/// <summary>
-            /// Constructor for when values equal limits
-            /// </summary>
-            /// <param name="minValue"></param>
-            /// <param name="maxValue"></param>
-            public MinMaxValues(float minValue, float maxValue)
-            {
-            	this.minValue = minValue;
-            	this.maxValue = maxValue;
-            	this.minLimit = minValue;
-            	this.maxLimit = maxValue;
-            }
-            
-            public bool IsAtMinAndMax()
-            {
-            	return Math.Abs(minValue - minLimit) < FLOAT_TOL && Math.Abs(maxValue - maxLimit) < FLOAT_TOL;
-            }
+			/// Constructor for when values equal limits
+			/// </summary>
+			/// <param name="minValue"></param>
+			/// <param name="maxValue"></param>
+			public MinMaxValues(float minValue, float maxValue)
+			{
+				this.minValue = minValue;
+				this.maxValue = maxValue;
+				this.minLimit = minValue;
+				this.maxLimit = maxValue;
+			}
+			
+			public bool IsAtMinAndMax()
+			{
+				return Math.Abs(minValue - minLimit) < FLOAT_TOL && Math.Abs(maxValue - maxLimit) < FLOAT_TOL;
+			}
 
 			public override string ToString()
 			{
