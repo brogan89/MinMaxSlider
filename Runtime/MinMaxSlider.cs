@@ -10,12 +10,14 @@ namespace Min_Max_Slider
 	[RequireComponent(typeof(RectTransform))]
 	public class MinMaxSlider : Selectable, IBeginDragHandler, IDragHandler, IEndDragHandler
 	{
-		private enum DragState
+		public enum HandleType
 		{
 			Both,
 			Min,
 			Max
 		}
+
+		public delegate string HandleTextOverride(HandleType handle, float value);
 
 		/// <summary>
 		/// Floating point tolerance
@@ -23,21 +25,21 @@ namespace Min_Max_Slider
 		private const float FLOAT_TOL = 0.01f;
 
 		[Header("UI Controls")]
-		[SerializeField] private Camera customCamera = null;
-		[SerializeField] private RectTransform sliderBounds = null;
-		[SerializeField] private RectTransform minHandle = null;
-		[SerializeField] private RectTransform maxHandle = null;
-		[SerializeField] private RectTransform middleGraphic = null;
+		[SerializeField] private Camera customCamera;
+		[SerializeField] private RectTransform sliderBounds;
+		[SerializeField] private RectTransform minHandle;
+		[SerializeField] private RectTransform maxHandle;
+		[SerializeField] private RectTransform middleGraphic;
 
 		// text components (optional)
 		[Header("Display Text (Optional)")]
-		[SerializeField] private TextMeshProUGUI minText = null;
-		[SerializeField] private TextMeshProUGUI maxText = null;
+		[SerializeField] private TextMeshProUGUI minText;
+		[SerializeField] private TextMeshProUGUI maxText;
 		[SerializeField] private string textFormat = "0";
 
 		// values
 		[Header("Limits")]
-		[SerializeField] private float minLimit = 0;
+		[SerializeField] private float minLimit;
 		[SerializeField] private float maxLimit = 100;
 
 		[Header("Values")]
@@ -59,10 +61,15 @@ namespace Min_Max_Slider
 
 		public SliderEvent onValueChanged = new SliderEvent();
 
+		/// <summary>
+		/// Override to set custom string values to the min/max text components
+		/// </summary>
+		public HandleTextOverride handleTextOverride { get; set; }
+
 		private Vector2 dragStartPosition;
 		private float dragStartMinValue01;
 		private float dragStartMaxValue01;
-		private DragState dragState;
+		private HandleType handleType;
 		private bool passDragEvents; // this allows drag events to be passed through to scrollers
 
 		private Camera mainCamera;
@@ -78,7 +85,7 @@ namespace Min_Max_Slider
 
 			parentCanvas = GetComponentInParent<Canvas>();
 			isOverlayCanvas = parentCanvas.renderMode == RenderMode.ScreenSpaceOverlay;
-			mainCamera = customCamera != null ? customCamera : Camera.main;
+			mainCamera = customCamera ? customCamera : Camera.main;
 		}
 
 		public void SetLimits(float minLimit, float maxLimit)
@@ -108,10 +115,7 @@ namespace Min_Max_Slider
 			UpdateMiddleGraphic();
 
 			if (notify)
-			{
-				// event
 				onValueChanged.Invoke(this.minValue, this.maxValue);
-			}
 		}
 
 		private void RefreshSliders()
@@ -119,10 +123,10 @@ namespace Min_Max_Slider
 			SetSliderAnchors();
 
 			float clampedMin = Mathf.Clamp(minValue, minLimit, maxLimit);
-			SetMinHandleValue01(minHandle, GetPercentage(minLimit, maxLimit, clampedMin));
+			SetMinHandleValue01(minHandle, Mathf.InverseLerp(minLimit, maxLimit, clampedMin));
 
 			float clampedMax = Mathf.Clamp(maxValue, minLimit, maxLimit);
-			SetMaxHandleValue01(maxHandle, GetPercentage(minLimit, maxLimit, clampedMax));
+			SetMaxHandleValue01(maxHandle, Mathf.InverseLerp(minLimit, maxLimit, clampedMax));
 		}
 
 		private void SetSliderAnchors()
@@ -136,13 +140,24 @@ namespace Min_Max_Slider
 			maxHandle.pivot = new Vector2(0.5f, 0.5f);
 		}
 
-		private void UpdateText()
+		public void UpdateText()
 		{
-			if (minText)
-				minText.SetText(minValue.ToString(textFormat));
+			if (handleTextOverride != null)
+			{
+				if (minText)
+					minText.SetText(handleTextOverride(HandleType.Min, minValue));
+				
+				if (maxText)
+					maxText.SetText(handleTextOverride(HandleType.Max, maxValue));
+			}
+			else
+			{
+				if (minText)
+					minText.SetText(minValue.ToString(textFormat));
 
-			if (maxText)
-				maxText.SetText(maxValue.ToString(textFormat));
+				if (maxText)
+					maxText.SetText(maxValue.ToString(textFormat));
+			}
 		}
 
 		private void UpdateMiddleGraphic()
@@ -176,16 +191,16 @@ namespace Min_Max_Slider
 				// set drag state
 				if (dragStartValue < dragStartMinValue01 || RectTransformUtility.RectangleContainsScreenPoint(minHandle, eventData.position, uiCamera))
 				{
-					dragState = DragState.Min;
+					handleType = HandleType.Min;
 					minHandle.SetAsLastSibling();
 				}
 				else if (dragStartValue > dragStartMaxValue01 || RectTransformUtility.RectangleContainsScreenPoint(maxHandle, eventData.position, uiCamera))
 				{
-					dragState = DragState.Max;
+					handleType = HandleType.Max;
 					maxHandle.SetAsLastSibling();
 				}
 				else
-					dragState = DragState.Both;
+					handleType = HandleType.Both;
 			}
 		}
 
@@ -201,22 +216,22 @@ namespace Min_Max_Slider
 
 				SetSliderAnchors();
 
-				if (dragState == DragState.Min || dragState == DragState.Max)
+				if (handleType == HandleType.Both)
+				{
+					float distancePercent = (clickPosition.x - dragStartPosition.x) / sliderBounds.rect.width;
+					SetMinHandleValue01(minHandle, dragStartMinValue01 + distancePercent);
+					SetMaxHandleValue01(maxHandle, dragStartMaxValue01 + distancePercent);
+				}
+				else
 				{
 					float dragPosition01 = GetValueOfPointInSliderBounds01(clickPosition);
 					float minHandleValue = GetMinHandleValue01(minHandle);
 					float maxHandleValue = GetMaxHandleValue01(maxHandle);
 
-					if (dragState == DragState.Min)
+					if (handleType == HandleType.Min)
 						SetMinHandleValue01(minHandle, Mathf.Clamp(dragPosition01, 0, maxHandleValue));
-					else if (dragState == DragState.Max)
+					else if (handleType == HandleType.Max)
 						SetMaxHandleValue01(maxHandle, Mathf.Clamp(dragPosition01, minHandleValue, 1));
-				}
-				else
-				{
-					float distancePercent = (clickPosition.x - dragStartPosition.x) / sliderBounds.rect.width;
-					SetMinHandleValue01(minHandle, dragStartMinValue01 + distancePercent);
-					SetMaxHandleValue01(maxHandle, dragStartMaxValue01 + distancePercent);
 				}
 
 				// set values
@@ -252,7 +267,7 @@ namespace Min_Max_Slider
 		{
 			Transform parent = transform.parent;
 
-			while (parent != null)
+			while (parent)
 			{
 				foreach (var component in parent.GetComponents<Component>())
 				{
@@ -316,18 +331,6 @@ namespace Min_Max_Slider
 		{
 			var width = sliderBounds.rect.width;
 			return Mathf.Clamp((position.x + width / 2) / width, 0, 1);
-		}
-
-		/// <summary>
-		/// Returns percentage of input based on min and max values
-		/// </summary>
-		/// <param name="min"></param>
-		/// <param name="max"></param>
-		/// <param name="input"></param>
-		/// <returns></returns>
-		private static float GetPercentage(float min, float max, float input)
-		{
-			return (input - min) / (max - min);
 		}
 
 		[Serializable]
